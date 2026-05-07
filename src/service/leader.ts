@@ -42,3 +42,8 @@ export const getNotes = async (leadId: number) => {
   const res = await api.get(`/note/getNotes/${leadId}`);
   return res.data;
 }
+
+export const deleteLead = async (id: number) => {
+  const res = await api.delete(`/leader/delete/${id}`);
+  return res.data;
+}

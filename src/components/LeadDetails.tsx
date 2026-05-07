@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom';
 import { User, Mail, Phone, Building2, Tag, Trash2, Save, MessageSquare, Clock, IdCardIcon } from 'lucide-react';
-import { getDetails, getNotes, saveNote } from '../service/leader';
+import { getDetails, getNotes, saveNote, deleteLead } from '../service/leader';
 
 interface Lead {
   id: number;
@@ -64,10 +64,15 @@ export default function LeadDetails() {
     // මෙතනදී Backend PUT/PATCH request එක යවන්න
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if(window.confirm("Are you sure you want to delete this lead?")) {
+      if(!id) {
+        alert("Lead ID is missing. Cannot delete.");
+        return;
+      }
+      const res = await deleteLead(Number(id));
       alert("Lead Deleted!");
-      navigate('/leads'); // Delete කළාට පස්සේ ආපහු list එකට යනවා
+      navigate('/dashboard/leads'); // Delete කළාට පස්සේ ආපහු list එකට යනවා
     }
   };
 

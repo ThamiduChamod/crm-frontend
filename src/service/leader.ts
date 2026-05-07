@@ -10,6 +10,16 @@ type RegisterData = {
   dealValue: string
 }
 
+type UpdateData = {
+  name?: string
+  company?: string
+  email?: string
+  phone?: string
+  source?: string
+  status?: string
+  dealValue?: string
+}
+
 export const addLeader = async (data: RegisterData) => {
   const res = await api.post("/leader/save", data,{
      headers: {
@@ -45,5 +55,14 @@ export const getNotes = async (leadId: number) => {
 
 export const deleteLead = async (id: number) => {
   const res = await api.delete(`/leader/delete/${id}`);
+  return res.data;
+}
+
+export const updateLead = async (id: number, data: UpdateData) => {
+  const res = await api.put(`/leader/update/${id}`, data, {
+    headers: {
+        "Content-Type": "application/json"
+    }
+  });
   return res.data;
 }

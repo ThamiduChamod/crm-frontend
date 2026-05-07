@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom';
 import { User, Mail, Phone, Building2, Tag, Trash2, Save, MessageSquare, Clock, IdCardIcon } from 'lucide-react';
-import { getDetails, getNotes, saveNote, deleteLead } from '../service/leader';
+import { getDetails, getNotes, saveNote, deleteLead, updateLead } from '../service/leader';
 
 interface Lead {
   id: number;
@@ -12,7 +12,7 @@ interface Lead {
   dealValue: string;
   source: string;
 
-   notes: Note[];
+  notes: Note[];
 }
 interface Note {
   id: number;
@@ -59,9 +59,33 @@ export default function LeadDetails() {
 
   const [newNote, setNewNote] = useState('');
 
-  const handleUpdate = () => {
-    alert("Lead Updated Successfully!");
-    // මෙතනදී Backend PUT/PATCH request එක යවන්න
+  const handleUpdate = async () => {
+    if(window.confirm("Are you sure you want to update this lead?")) {
+      if(!lead) {
+        alert("Lead data is not loaded yet. Please wait.");
+        return;
+      }
+      try{
+        const res = await updateLead(lead.id, {
+          name: lead.name,
+          email: lead.email,
+          status: lead.status,
+          dealValue: lead.dealValue,
+        });
+        console.log("Update response:", res);
+        if(res.isUpdated){
+          alert("Lead updated successfully!");
+          lead.name = res.data.leader.name;
+          lead.email = res.data.leader.email;
+          lead.status = res.data.leader.status;
+          lead.dealValue = res.data.leader.dealValue;
+          setLead({...lead}); 
+        }
+      }catch(error){
+        alert("Failed to update lead. Please try again.");
+        return;
+      }
+    }
   };
 
   const handleDelete = async () => {

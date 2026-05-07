@@ -66,13 +66,29 @@ export default function Leads() {
     return matchesSearch && matchesStatus;
   });
 
-  // Status වලට අදාළ වර්ණ (Colors)
+  
   const getStatusStyle = (status : string) => {
     switch (status) {
-      case 'Won': return 'bg-emerald-50 text-emerald-600 border-emerald-100';
-      case 'Lost': return 'bg-red-50 text-red-600 border-red-100';
-      case 'New': return 'bg-blue-50 text-blue-600 border-blue-100';
-      default: return 'bg-amber-50 text-amber-600 border-amber-100';
+      case 'NEW':
+      return 'bg-sky-100 text-sky-700 border-sky-200';
+
+    case 'CONTACTED':
+      return 'bg-cyan-100 text-cyan-700 border-cyan-200';
+
+    case 'QUALIFIED':
+      return 'bg-violet-100 text-violet-700 border-violet-200';
+
+    case 'PROPOSAL_SENT':
+      return 'bg-orange-100 text-orange-700 border-orange-200';
+
+    case 'WON':
+      return 'bg-green-100 text-green-700 border-green-200';
+
+    case 'LOST':
+      return 'bg-rose-100 text-rose-700 border-rose-200';
+
+    default:
+      return 'bg-gray-100 text-gray-700 border-gray-200';
     }
   };
 

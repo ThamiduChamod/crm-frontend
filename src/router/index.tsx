@@ -9,6 +9,8 @@ const SalesOverview = lazy(() => import('../components/SalesOverview'))
 const AddLeader = lazy(() => import('../components/AddLeader'))
 const Pipeline = lazy(() => import('../components/Pipeline'))
 const Activities = lazy(() => import('../components/Activities'))
+const LeadDetails = lazy(() => import('../components/LeadDetails'))
+const Leads = lazy(() => import('../components/Leads'))
 // const Settings = lazy(() => import('../components/Settings'))    
 
 
@@ -79,9 +81,13 @@ export default function Router() {
 
                         <Route path="addLeader" element={<AddLeader />} />
 
+                        <Route path = 'leads' element={<Leads />} />
+
                         <Route path='pipeline' element={<Pipeline />} />
 
                         <Route path='activities' element={<Activities />} />
+
+                        <Route path='leads/:id' element={<LeadDetails />} />
 
                         {/* <Route path='settings' element={<Settings />} /> */}
 

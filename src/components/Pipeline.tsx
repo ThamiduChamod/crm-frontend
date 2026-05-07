@@ -1,17 +1,56 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MoreVertical, Plus, DollarSign, Calendar } from 'lucide-react';
+import {getAllLeaders} from '../service/leader';
+interface Lead {
+  id: number;
+  name: string;
+  company: string;
+  email: string;
+  status: string;
+  dealValue: string;
+  source: string;
+  createdAt: string;
+}
 
 const Pipeline = () => {
-  // Demo දත්ත - පසුව මේවා Backend එකෙන් Status අනුව Filter කරලා ගන්න පුළුවන්
-  const [leads, setLeads] = useState([
-    { id: 1, name: 'Siri Perera', company: 'Siri Constr.', value: 150000, status: 'New', date: '2024-05-20' },
-    { id: 2, name: 'John Doe', company: 'Global Tech', value: 45000, status: 'Contacted', date: '2024-05-21' },
-    { id: 3, name: 'Amara Silva', company: 'Fashion Hub', value: 20000, status: 'Qualified', date: '2024-05-18' },
-    { id: 4, name: 'Kamal Gun', company: 'Auto Mart', value: 85000, status: 'Won', date: '2024-05-15' },
-    { id: 5, name: 'Nimali', company: 'Green Garden', value: 12000, status: 'New', date: '2024-05-22' },
-  ]);
+  const [leads, setLeads] = useState<Lead[]>([]);
+  const [totalValue, setTotalValue] = useState(0);
+  useEffect(() => {
+    fetchLeads();
+  }, []);
 
-  const stages = ['New', 'Contacted', 'Qualified', 'Won', 'Lost'];
+  const fetchLeads = async () => {
+    try {
+      const response = await getAllLeaders();
+      const leaders = response.data.leaders;
+
+    setLeads(leaders);
+    
+    const total = leaders.reduce((acc: number, lead: Lead) => {
+      const value = parseFloat(lead.dealValue?.toString().replace(/[$,]/g, '') || "0");
+      return acc + value;
+    }, 0);
+
+    setTotalValue(total);
+
+    console.log('Fetched:', leaders.length);
+    } catch (error) {
+      console.error('Error fetching leads:', error);
+    }
+  }
+
+  
+
+  // Demo දත්ත - පසුව මේවා Backend එකෙන් Status අනුව Filter කරලා ගන්න පුළුවන්
+  // const [leads, setLeads] = useState([
+  //   { id: 1, name: 'Siri Perera', company: 'Siri Constr.', value: 150000, status: 'New', date: '2024-05-20' },
+  //   { id: 2, name: 'John Doe', company: 'Global Tech', value: 45000, status: 'Contacted', date: '2024-05-21' },
+  //   { id: 3, name: 'Amara Silva', company: 'Fashion Hub', value: 20000, status: 'Qualified', date: '2024-05-18' },
+  //   { id: 4, name: 'Kamal Gun', company: 'Auto Mart', value: 85000, status: 'Won', date: '2024-05-15' },
+  //   { id: 5, name: 'Nimali', company: 'Green Garden', value: 12000, status: 'New', date: '2024-05-22' },
+  // ]);
+
+  const stages = ['NEW', 'CONTACTED', 'QUALIFIED', 'WON', 'LOST'];
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
@@ -23,7 +62,7 @@ const Pipeline = () => {
         </div>
         <div className="flex space-x-3">
           <div className="bg-white border border-gray-200 px-4 py-2 rounded-xl text-sm font-semibold flex items-center shadow-sm">
-            Total Value: <span className="ml-2 text-blue-600">$312,000</span>
+            Total Value: <span className="ml-2 text-blue-600">${totalValue.toLocaleString()}</span>
           </div>
           <button className="bg-black text-white px-5 py-2.5 rounded-xl text-sm font-bold flex items-center hover:bg-neutral-800 transition-all">
             <Plus size={18} className="mr-2" /> Add Deal
@@ -67,11 +106,11 @@ const Pipeline = () => {
                     <div className="flex items-center justify-between pt-4 border-t border-gray-50">
                       <div className="flex items-center text-emerald-600 font-bold text-sm">
                         <DollarSign size={14} className="mr-0.5" />
-                        {lead.value.toLocaleString()}
+                        {lead.dealValue}
                       </div>
                       <div className="flex items-center text-gray-400 text-[10px] font-medium">
                         <Calendar size={12} className="mr-1" />
-                        {lead.date}
+                        {lead.createdAt}
                       </div>
                     </div>
                   </div>

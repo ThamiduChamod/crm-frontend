@@ -4,12 +4,10 @@ import {
   Search, 
   Filter, 
   Plus, 
-  MoreHorizontal, 
-  ExternalLink,
   ChevronRight,
   User
 } from 'lucide-react';
-import LeaderDetails from '../components/LeadDetails';
+// import LeaderDetails from '../components/LeadDetails';
 import { useState } from 'react';
 import { getAllLeaders } from '../service/leader';
 

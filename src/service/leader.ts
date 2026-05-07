@@ -18,3 +18,8 @@ export const addLeader = async (data: RegisterData) => {
   })
   return res.data
 }
+
+export const getAllLeaders =async ()=>{
+  const res = await api.get("/leader/all");
+  return res.data;
+}

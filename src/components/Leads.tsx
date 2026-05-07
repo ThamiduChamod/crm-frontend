@@ -1,4 +1,4 @@
-import React from 'react'
+import  { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { 
   Search, 
@@ -9,23 +9,54 @@ import {
   ChevronRight,
   User
 } from 'lucide-react';
-import AddLeadModal from '../components/LeadDetails';
+import LeaderDetails from '../components/LeadDetails';
 import { useState } from 'react';
+import { getAllLeaders } from '../service/leader';
+
+interface Lead {
+  id: number;
+  name: string;
+  company: string;
+  email: string;
+  status: string;
+  dealValue: string;
+  source: string;
+}
 
 export default function Leads() {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
+  const [leads, setLeads] = useState<Lead[]>([]);
+
+  useEffect(() => {
+
+    const fetchLeads = async () => {
+      try {
+        const response = await getAllLeaders();
+
+        // API data set to state
+        setLeads(response.data.leaders);
+
+      } catch (error) {
+        console.error("Error fetching leads:", error);
+      }
+    };
+
+    fetchLeads();
+    // console.log(lead)
+  }, []);
+  console.log(leads);
 
   // Demo Data - පසුව මෙය Backend එකෙන් ලබාගන්න
-  const [leads] = useState([
-    { id: 1, name: 'Siri Perera', company: 'Siri Constr.', email: 'siri@cons.lk', status: 'Won', value: '$150,000', source: 'LinkedIn' },
-    { id: 2, name: 'John Doe', company: 'Global Tech', email: 'john@tech.com', status: 'New', value: '$45,000', source: 'Website' },
-    { id: 3, name: 'Amara Silva', company: 'Fashion Hub', email: 'amara@style.lk', status: 'Contacted', value: '$20,000', source: 'Referral' },
-    { id: 4, name: 'Kamal Gun', company: 'Auto Mart', email: 'kamal@auto.lk', status: 'Lost', value: '$85,000', source: 'Cold Email' },
-    { id: 5, name: 'Nimali Ratnayake', company: 'Green Garden', email: 'nimali@gg.lk', status: 'Qualified', value: '$12,000', source: 'Website' },
-  ]);
+  // const [leads] = useState([
+  //   { id: 1, name: 'Siri Perera', company: 'Siri Constr.', email: 'siri@cons.lk', status: 'Won', value: '$150,000', source: 'LinkedIn' },
+  //   { id: 2, name: 'John Doe', company: 'Global Tech', email: 'john@tech.com', status: 'New', value: '$45,000', source: 'Website' },
+  //   { id: 3, name: 'Amara Silva', company: 'Fashion Hub', email: 'amara@style.lk', status: 'Contacted', value: '$20,000', source: 'Referral' },
+  //   { id: 4, name: 'Kamal Gun', company: 'Auto Mart', email: 'kamal@auto.lk', status: 'Lost', value: '$85,000', source: 'Cold Email' },
+  //   { id: 5, name: 'Nimali Ratnayake', company: 'Green Garden', email: 'nimali@gg.lk', status: 'Qualified', value: '$12,000', source: 'Website' },
+  // ]);
 
   // Search සහ Filter Logic
   const filteredLeads = leads.filter(lead => {
@@ -81,11 +112,11 @@ export default function Leads() {
             onChange={(e) => setStatusFilter(e.target.value)}
           >
             <option value="All">All Status</option>
-            <option value="New">New</option>
-            <option value="Contacted">Contacted</option>
-            <option value="Qualified">Qualified</option>
-            <option value="Won">Won</option>
-            <option value="Lost">Lost</option>
+            <option value="NEW">New</option>
+            <option value="CONTACTED">Contacted</option>
+            <option value="QUALIFIED">Qualified</option>
+            <option value="WON">Won</option>
+            <option value="LOST">Lost</option>
           </select>
         </div>
       </div>
@@ -108,7 +139,7 @@ export default function Leads() {
                 <tr 
                   key={lead.id} 
                   className="hover:bg-neutral-50/50 transition-colors cursor-pointer group"
-                  onClick={() => navigate(`/leads/${lead.id}`)}
+                  onClick={() => navigate(`/dashboard/leads/${lead.id}`)}
                 >
                   <td className="px-6 py-4">
                     <div className="flex items-center space-x-3">
@@ -127,7 +158,7 @@ export default function Leads() {
                     </span>
                   </td>
                   <td className="px-6 py-4 text-sm font-bold text-gray-700">
-                    {lead.value}
+                    {lead.dealValue}
                   </td>
                   <td className="px-6 py-4">
                     <span className="text-xs text-gray-500 font-medium bg-gray-100 px-2 py-1 rounded-md">
@@ -155,7 +186,7 @@ export default function Leads() {
       </div>
 
       {/* Add Lead Modal */}
-      {/* <AddLeadModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} /> */}
+      {/* <LeaderDetails /> */}
     </div>
   );
 }

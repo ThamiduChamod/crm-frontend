@@ -9,7 +9,7 @@ import {
   Menu,
   X,
   GitBranch,
-  ClipboardList
+  ClipboardList,
 
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
@@ -27,6 +27,7 @@ export default function Dashboard() {
     { name: 'Add Leader', icon: Users, path: '/dashboard/addLeader' },
     { name: 'Sales Pipeline', icon: GitBranch, path: '/dashboard/pipeline' }, // Bonus: කන්බන් බෝඩ් එක සඳහා
     { name: 'Activities', icon: ClipboardList, path: '/dashboard/activities' }, // Notes සහ updates බැලීමට
+    { name: 'Leads', icon: Users, path: '/dashboard/leads' },
     { name: 'Settings', icon: Settings, path: '/dashboard/settings' },
   ];
 

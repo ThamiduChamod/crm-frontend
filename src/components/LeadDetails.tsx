@@ -1,24 +1,60 @@
-import React, { useState } from 'react'
+import React, { useInsertionEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom';
-import { User, Mail, Phone, Building2, Tag, Trash2, Save, MessageSquare, Clock } from 'lucide-react';
+import { User, Mail, Phone, Building2, Tag, Trash2, Save, MessageSquare, Clock, IdCardIcon } from 'lucide-react';
+import { getDetails } from '../service/leader';
+
+interface Lead {
+  id: number;
+  name: string;
+  company: string;
+  email: string;
+  status: string;
+  dealValue: string;
+  source: string;
+
+   notes: Note[];
+}
+interface Note {
+  id: number;
+  content: string;
+  leadId: string;
+  userId: string;
+  createdAt: string;
+}
 
 export default function LeadDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [lead, setLead] = useState<Lead >();
+  const [notes, setNotes] = useState<Note>();
 
+  useInsertionEffect(() => {
+    // Fetch lead details based on ID
+    fetchData(id);
+  }, [id]);
+
+  const fetchData = async (id : any) =>{
+    try {
+      const res = await getDetails(id)
+      console.log(res)
+      setLead(res.data.leader)
+    } catch (error) {
+      
+    }
+  }
   // මෙතනදී Backend එකෙන් ID එකට අදාළ දත්ත ගේන්න ඕනේ. දැනට Demo data:
-  const [lead, setLead] = useState({
-    name: 'Siri Perera',
-    email: 'siri@construction.lk',
-    phone: '0712345678',
-    company: 'Siri Construction',
-    status: 'Contacted',
-    deal_value: '150000',
-    notes: [
-      { id: 1, text: 'Interested in bulk orders.', date: '2024-05-20' },
-      { id: 2, text: 'Follow up next Tuesday.', date: '2024-05-21' }
-    ]
-  });
+  // const [lead, setLead] = useState({
+  //   name: 'Siri Perera',
+  //   email: 'siri@construction.lk',
+  //   phone: '0712345678',
+  //   company: 'Siri Construction',
+  //   status: 'Contacted',
+  //   deal_value: '150000',
+  //   notes: [
+  //     { id: 1, text: 'Interested in bulk orders.', date: '2024-05-20' },
+  //     { id: 2, text: 'Follow up next Tuesday.', date: '2024-05-21' }
+  //   ]
+  // });
 
   const [newNote, setNewNote] = useState('');
 
@@ -36,8 +72,9 @@ export default function LeadDetails() {
 
   const addNote = () => {
     if(!newNote) return;
-    const noteObj = { id: Date.now(), text: newNote, date: new Date().toLocaleDateString() };
-    setLead({ ...lead, notes: [noteObj, ...lead.notes] });
+    
+    const noteObj = { id: Date.now(), content: newNote, date: new Date().toLocaleDateString() };
+
     setNewNote('');
   };
 
@@ -66,27 +103,48 @@ export default function LeadDetails() {
             <div>
               <label className="text-[10px] font-bold text-neutral-400 uppercase">Full Name</label>
               <input type="text" className="w-full mt-1 p-3 bg-gray-50 border border-gray-200 rounded-xl focus:border-black outline-none" 
-              value={lead.name} onChange={(e) => setLead({...lead, name: e.target.value})} />
+              value={lead?.name} onChange={(e) =>{
+                if(!lead) return
+
+                setLead({...lead, name: e.target.value})
+              } }/>
             </div>
             <div>
               <label className="text-[10px] font-bold text-neutral-400 uppercase">Status</label>
               <select className="w-full mt-1 p-3 bg-gray-50 border border-gray-200 rounded-xl focus:border-black outline-none"
-              value={lead.status} onChange={(e) => setLead({...lead, status: e.target.value})}>
-                <option value="New">New</option>
-                <option value="Contacted">Contacted</option>
-                <option value="Won">Won</option>
-                <option value="Lost">Lost</option>
+              value={lead?.status} 
+              onChange={(e) => {
+                  if (!lead) return;
+
+                  setLead({
+                      ...lead,
+                      status: e.target.value
+                  });
+                }}
+              >
+                <option value="NEW">New</option>
+                <option value="CONTACTED">Contacted</option>
+                <option value="QUALIFIED">Qualified</option>
+                <option value="PROPOSAL_SENT">Proposal Sent</option>
+                <option value="WON">Won</option>
+                <option value="LOST">Lost</option>
               </select>
             </div>
             <div>
               <label className="text-[10px] font-bold text-neutral-400 uppercase">Email Address</label>
               <input type="email" className="w-full mt-1 p-3 bg-gray-50 border border-gray-200 rounded-xl focus:border-black outline-none" 
-              value={lead.email} onChange={(e) => setLead({...lead, email: e.target.value})} />
+              value={lead?.email} onChange={(e) => {
+                if(!lead) return;
+                setLead({...lead, email: e.target.value});
+              }} />
             </div>
             <div>
               <label className="text-[10px] font-bold text-neutral-400 uppercase">Deal Value ($)</label>
               <input type="number" className="w-full mt-1 p-3 bg-gray-50 border border-gray-200 rounded-xl focus:border-black outline-none" 
-              value={lead.deal_value} onChange={(e) => setLead({...lead, deal_value: e.target.value})} />
+              value={lead?.dealValue} onChange={(e) => {
+                if(!lead) return;
+                setLead({...lead, dealValue: e.target.value});
+              }} />
             </div>
           </div>
         </div>
@@ -110,7 +168,7 @@ export default function LeadDetails() {
           </div>
 
           <div className="space-y-4 max-h-[300px] overflow-y-auto pr-2">
-            {lead.notes.map((note) => (
+            {lead?.notes?.map((note) => (
               <div key={note.id} className="p-4 bg-neutral-50 rounded-2xl border border-neutral-100">
                 <p className="text-sm text-neutral-700 mb-2">{note.text}</p>
                 <div className="flex items-center text-[10px] font-bold text-neutral-400 uppercase tracking-widest">

@@ -13,13 +13,18 @@ type RegisterData = {
 export const addLeader = async (data: RegisterData) => {
   const res = await api.post("/leader/save", data,{
      headers: {
-            "Content-Type": "application/json"
-        }
+        "Content-Type": "application/json"
+      }
   })
   return res.data
 }
 
 export const getAllLeaders =async ()=>{
   const res = await api.get("/leader/all");
+  return res.data;
+}
+
+export const getDetails = async (id: number) => {
+   const res = await api.get(`/leader/details/${id}`);
   return res.data;
 }

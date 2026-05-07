@@ -28,3 +28,17 @@ export const getDetails = async (id: number) => {
    const res = await api.get(`/leader/details/${id}`);
   return res.data;
 }
+
+export const saveNote = async(content: string, leadId: number) => {
+  const res = await  api.post("/note/save", { content, leadId },{
+    headers: {
+        "Content-Type": "application/json"
+      }
+  })
+  return res.data;
+}
+
+export const getNotes = async (leadId: number) => {
+  const res = await api.get(`/note/getNotes/${leadId}`);
+  return res.data;
+}

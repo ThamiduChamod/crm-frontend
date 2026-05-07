@@ -1,7 +1,7 @@
-import React, { useInsertionEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom';
 import { User, Mail, Phone, Building2, Tag, Trash2, Save, MessageSquare, Clock, IdCardIcon } from 'lucide-react';
-import { getDetails } from '../service/leader';
+import { getDetails, getNotes, saveNote } from '../service/leader';
 
 interface Lead {
   id: number;
@@ -28,7 +28,7 @@ export default function LeadDetails() {
   const [lead, setLead] = useState<Lead >();
   const [notes, setNotes] = useState<Note>();
 
-  useInsertionEffect(() => {
+  useEffect(() => {
     // Fetch lead details based on ID
     fetchData(id);
   }, [id]);
@@ -38,6 +38,7 @@ export default function LeadDetails() {
       const res = await getDetails(id)
       console.log(res)
       setLead(res.data.leader)
+      getNote();
     } catch (error) {
       
     }
@@ -70,13 +71,47 @@ export default function LeadDetails() {
     }
   };
 
-  const addNote = () => {
-    if(!newNote) return;
-    
+  const addNote = async () => {
+    console.log("Adding Note:");
+    if(!newNote){
+      alert("Please enter a note before adding.");
+      return;
+    }
+    if(!lead){
+      alert("Lead data is not loaded yet. Please wait.");
+      return;
+    }
+    try {
+      const res = await saveNote(newNote, lead.id);
+      console.log("Note added response:", res);
+      if(res.isAdded){
+        alert("Note added successfully!");
+      }
+    } catch (error) {
+      alert("Failed to add note. Please try again.");
+    }
     const noteObj = { id: Date.now(), content: newNote, date: new Date().toLocaleDateString() };
 
     setNewNote('');
   };
+
+  const getNote = async () => {
+    const res = await getNotes(Number(id));
+    console.log("Fetched notes:", res.notes);
+    lead?.notes[ 
+      res.notes.map(
+        (note: Note) => (
+          { id: note.id,
+            content: note.content, 
+            date: new Date(note.createdAt).toLocaleDateString() 
+          }
+        )
+      )
+    ]
+
+
+    // return lead.notes.map(note => ({  id: note.id, text: note.content, date: new Date(note.createdAt).toLocaleDateString() }));
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
@@ -170,9 +205,9 @@ export default function LeadDetails() {
           <div className="space-y-4 max-h-[300px] overflow-y-auto pr-2">
             {lead?.notes?.map((note) => (
               <div key={note.id} className="p-4 bg-neutral-50 rounded-2xl border border-neutral-100">
-                <p className="text-sm text-neutral-700 mb-2">{note.text}</p>
+                <p className="text-sm text-neutral-700 mb-2">{note.content}</p>
                 <div className="flex items-center text-[10px] font-bold text-neutral-400 uppercase tracking-widest">
-                  <Clock size={10} className="mr-1" /> {note.date}
+                  <Clock size={10} className="mr-1" /> {note.createdAt}
                 </div>
               </div>
             ))}

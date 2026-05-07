@@ -12,7 +12,7 @@ const RequireAuth = ({ children, roles }: RequireAuthTypes) => {
 
     const { user, loading } = useAuth();
     console.log("USER IN REQUIRE AUTH", user)
-    console.log("USER ROLES",user?.roles)
+    console.log("USER ROLES",user?.role)
 
     if (loading) {
         return (
@@ -52,7 +52,7 @@ export default function Router() {
 
                 <Route path = "/dashboard" 
                     element={
-                        <RequireAuth roles={["Admin"]}>
+                        <RequireAuth roles={["Admin","User"]}>
                             <Dashboard />
                         </RequireAuth>
                     } />

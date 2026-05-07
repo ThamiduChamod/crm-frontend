@@ -1,7 +1,9 @@
 import { ArrowRight, Mail } from 'lucide-react'
 import React,{useState} from 'react'
-import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { register, login } from '../service/auth';
+import { getMyDetails } from '../service/auth';
+import { useAuth } from '../context/AuthContext';
 
 export default function Login() {
    const [isLogin, setIsLogin] = useState(true);
@@ -9,26 +11,85 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [error, setError] = useState('');
-  
-  const { login } = useAuth();
+  const { setUser } = useAuth();
   const navigate = useNavigate();
 
-  const handleAuth = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleAuth = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError('');
 
     if (isLogin) {
       // Login Logic
-      if (email === 'admin@example.com' && password === 'password123') {
-        login({ email, roles: ['Admin'], name: 'Admin User' });
-        navigate('/dashboard');
-      } else {
-        setError('Invalid credentials. Use admin@example.com / password123');
+      console.log('Logging in:', { email, password });
+      if (!email || !password) {
+        setError('Email and password are required for login.');
+        return;
+      }
+      try {
+        const res = await login(email, password);
+        console.log('Login response:', res);
+
+        if (res.login) {
+          console.log('User data:', res.data);
+          
+          
+          localStorage.setItem("accessToken", res.data.accessToken);
+          localStorage.setItem("refreshToken", res.data.refreshToken);
+          localStorage.setItem("role", res.data.role);
+
+          try {
+            const details = await getMyDetails();
+            setUser(details.data);
+            alert("Login successful.");
+          } catch (err) {
+            console.error('Error setting user details:', err);
+            alert("Login successful, but failed to retrieve user details.");
+          }
+          navigate('/dashboard');
+        } else {
+          setError(res.message || 'Login failed. Please check your credentials and try again.');
+        }
+      } catch (err) {
+        setError('Login failed. Please try again.');
       }
     } else {
       // Sign Up Logic (Demo)
-      alert("Registration is disabled for this demo. Use the test admin account.");
-      setIsLogin(true);
+      console.log('Registering:', { name, email, password });
+
+      if (!name || !email || !password) {
+        setError('All fields are required for registration.');
+        return;
+      }
+      try {
+        const res = await register({ name, email, password });
+        console.log('Registration response:', res);
+        
+        if (res.login) {
+          console.log('User data:', res.data);
+          
+          
+          localStorage.setItem("accessToken", res.data.accessToken);
+          localStorage.setItem("refreshToken", res.data.refreshToken);
+          localStorage.setItem("role", res.data.role);
+
+          try {
+            const details = await getMyDetails();
+            setUser(details.data);
+            alert("Login successful.");
+          } catch (err) {
+            console.error('Error setting user details:', err);
+            alert("Login successful, but failed to retrieve user details.");
+          }
+          navigate('/dashboard');
+        } else {
+          setError(res.message || 'Login failed. Please check your credentials and try again.');
+        }
+
+
+      } catch (err) {
+        setError('Registration failed. Please try again.');
+        alert('Registration failed. Please try again.');
+      }
     }
   };
 

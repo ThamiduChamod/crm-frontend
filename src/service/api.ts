@@ -3,7 +3,7 @@ import { refreshTokens } from "./auth"
 
 
 const api = axios.create({
-  baseURL: "http://localhost:5000/api/v1"
+  baseURL: "http://localhost:3000/api"
 })
 
 const PUBLIC_ENDPOINTS = ["/auth/login", "/auth/register"]

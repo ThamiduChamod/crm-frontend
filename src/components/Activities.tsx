@@ -1,66 +1,103 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { 
-  MessageSquare, 
-  UserPlus, 
-  RefreshCw, 
+  MessageSquare,
+  UserPlus,
+  RefreshCw,
   CheckCircle2, 
   Clock,
   Search,
   Filter
 } from 'lucide-react';
+import { getActivities } from '../service/activity';
+
+type Activity = {
+  id: string;
+  type: string;
+  user: string;
+  action: string;
+  target: string;
+  content: string;
+  time: string;
+  icon?: any;
+  color: string;
+  bg: string;
+};
 
 export default function Activities() {
-  // Demo Activity Data
-  const activities = [
-    {
-      id: 1,
-      type: 'note',
-      user: 'Admin User',
-      action: 'added a note to',
-      target: 'Siri Perera',
-      content: 'Customer is interested in the premium plan, follow up on Monday.',
-      time: '2 hours ago',
-      icon: MessageSquare,
-      color: 'text-blue-600',
-      bg: 'bg-blue-50'
-    },
-    {
-      id: 2,
-      type: 'status',
-      user: 'Admin User',
-      action: 'changed status of',
-      target: 'John Doe',
-      content: 'New → Contacted',
-      time: '4 hours ago',
-      icon: RefreshCw,
-      color: 'text-purple-600',
-      bg: 'bg-purple-50'
-    },
-    {
-      id: 3,
-      type: 'lead',
-      user: 'Admin User',
-      action: 'created a new lead',
-      target: 'Amara Silva',
-      content: 'Source: LinkedIn | Value: $20,000',
-      time: 'Yesterday',
-      icon: UserPlus,
-      color: 'text-emerald-600',
-      bg: 'bg-emerald-50'
-    },
-    {
-      id: 4,
-      type: 'won',
-      user: 'Admin User',
-      action: 'marked as won',
-      target: 'Kamal Gun',
-      content: 'Deal closed for $85,000',
-      time: '2 days ago',
-      icon: CheckCircle2,
-      color: 'text-amber-600',
-      bg: 'bg-amber-50'
+
+  const [activities, setActivities] = useState<Activity[]>([]);
+
+  useEffect(() => {
+    fetchActivities();
+  }, []);
+
+  const fetchActivities = async () => {
+    try {
+      const res = await getActivities();
+      console.log('Fetched Activities:', res);
+      setActivities(res.activities);
+    } catch (err) {
+      console.error(err);
     }
-  ];
+  };
+
+  const iconMap: any = {
+    note: MessageSquare,
+    lead: UserPlus,
+    status: RefreshCw,
+    won: CheckCircle2
+  };
+  // Demo Activity Data
+  // const activities = [
+  //   {
+  //     id: 1,
+  //     type: 'note',
+  //     user: 'Admin User',
+  //     action: 'added a note to',
+  //     target: 'Siri Perera',
+  //     content: 'Customer is interested in the premium plan, follow up on Monday.',
+  //     time: '2 hours ago',
+  //     icon: MessageSquare,
+  //     color: 'text-blue-600',
+  //     bg: 'bg-blue-50'
+  //   },
+  //   {
+  //     id: 2,
+  //     type: 'status',
+  //     user: 'Admin User',
+  //     action: 'changed status of',
+  //     target: 'John Doe',
+  //     content: 'New → Contacted',
+  //     time: '4 hours ago',
+  //     icon: RefreshCw,
+  //     color: 'text-purple-600',
+  //     bg: 'bg-purple-50'
+  //   },
+  //   {
+  //     id: 3,
+  //     type: 'lead',
+  //     user: 'Admin User',
+  //     action: 'created a new lead',
+  //     target: 'Amara Silva',
+  //     content: 'Source: LinkedIn | Value: $20,000',
+  //     time: 'Yesterday',
+  //     icon: UserPlus,
+  //     color: 'text-emerald-600',
+  //     bg: 'bg-emerald-50'
+  //   },
+  //   {
+  //     id: 4,
+  //     type: 'won',
+  //     user: 'Admin User',
+  //     action: 'marked as won',
+  //     target: 'Kamal Gun',
+  //     content: 'Deal closed for $85,000',
+  //     time: '2 days ago',
+  //     icon: CheckCircle2,
+  //     color: 'text-amber-600',
+  //     bg: 'bg-amber-50'
+  //   }
+  // ];
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
@@ -90,12 +127,15 @@ export default function Activities() {
       <div className="max-w-4xl mx-auto">
         <div className="relative space-y-8 before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-gray-200 before:to-transparent">
           
-          {activities.map((item) => (
+          {activities.map((item) => {
+            const Icon = iconMap[item.type] || MessageSquare;
+
+            return(
             <div key={item.id} className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
               
               {/* Icon Dot */}
               <div className="flex items-center justify-center w-10 h-10 rounded-full border border-white bg-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
-                <item.icon className={`${item.color} w-5 h-5`} />
+                <Icon className={`${item.color} w-5 h-5`} />
               </div>
 
               {/* Content Card */}
@@ -116,7 +156,7 @@ export default function Activities() {
                 </div>
               </div>
             </div>
-          ))}
+          )})}
 
         </div>
       </div>

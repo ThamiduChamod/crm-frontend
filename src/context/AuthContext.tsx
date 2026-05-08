@@ -39,3 +39,9 @@ export const useAuth = () => {
     }
     return context;
 }
+
+export const logout = () => {
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    window.location.href = '/';
+}

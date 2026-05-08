@@ -45,7 +45,7 @@ export default function Login() {
             console.error('Error setting user details:', err);
             alert("Login successful, but failed to retrieve user details.");
           }
-          navigate('/dashboard');
+          navigate('/dashboard/salesOverview');
         } else {
           setError(res.message || 'Login failed. Please check your credentials and try again.');
         }
@@ -80,7 +80,7 @@ export default function Login() {
             console.error('Error setting user details:', err);
             alert("Login successful, but failed to retrieve user details.");
           }
-          navigate('/dashboard');
+          navigate('/dashboard/salesOverview');
         } else {
           setError(res.message || 'Login failed. Please check your credentials and try again.');
         }

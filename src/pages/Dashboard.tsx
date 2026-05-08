@@ -4,7 +4,6 @@ import {
   LayoutDashboard, 
   Users, 
   LogOut, 
-  Settings, 
   Bell,
   Menu,
   X,
@@ -28,7 +27,7 @@ export default function Dashboard() {
     { name: 'Sales Pipeline', icon: GitBranch, path: '/dashboard/pipeline' }, 
     { name: 'Activities', icon: ClipboardList, path: '/dashboard/activities' }, 
     { name: 'Leads', icon: Users, path: '/dashboard/leads' },
-    { name: 'Settings', icon: Settings, path: '/dashboard/settings' },
+    // { name: 'Settings', icon: Settings, path: '/dashboard/settings' },
   ];
 
   const handleLogout = () => {
@@ -37,7 +36,7 @@ export default function Dashboard() {
     localStorage.removeItem('refreshToken');
     navigate('/');
   };
-
+console.log('Current user in Dashboard:', user);
   return (
     <>
       {/* Mobile Menu Toggle */}
@@ -92,7 +91,7 @@ export default function Dashboard() {
           <div className="border-t border-neutral-100 pt-6">
             <div className="flex items-center space-x-3 px-2 mb-6">
               <div className="w-10 h-10 rounded-full bg-neutral-900 flex items-center justify-center text-white font-bold text-xs">
-                {user?.data.name?.charAt(0) || 'A'}
+                {user?.name?.charAt(0) || 'A'}
               </div>
               <div className="flex-1 overflow-hidden">
                 <p className="text-sm font-bold truncate">{user?.data.name || 'Admin User'}</p>

@@ -1,4 +1,3 @@
-import React from 'react'
 import {  User, Building2, Mail, Phone, DollarSign, Send } from 'lucide-react';
 import { useState } from 'react';
 import { addLeader } from '../service/leader';

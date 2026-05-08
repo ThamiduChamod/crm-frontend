@@ -23,7 +23,6 @@ interface Lead {
 
 export default function Leads() {
   const navigate = useNavigate();
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
   const [leads, setLeads] = useState<Lead[]>([]);

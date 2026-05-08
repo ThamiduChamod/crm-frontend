@@ -58,24 +58,16 @@ export default function Router() {
             <Routes>
                 <Route path = "/" element={<Login />} />
 
-                {/* <Route path = "/dashboard" 
+                <Route
+                    path="/dashboard"
                     element={
-                        <RequireAuth roles={["Admin","USER"]}>
-                            <Dashboard />
-                            <Route path="/salesOverview" element={<SalesOverview />} />
-                            <Route path="/addAuthor" element={<AddAuthor />} />
+                        <RequireAuth roles={["ADMIN", "USER"]}>
+                            <Dashboard />     
                         </RequireAuth>
-                    } /> */}
-                    <Route
-                        path="/dashboard"
-                        element={
-                            <RequireAuth roles={["ADMIN", "USER"]}>
-                                <Dashboard />
-                            </RequireAuth>
-                        }
+                    }
                     >
 
-                        <Route index element={<SalesOverview />} />
+                        <Route path = "" element={<SalesOverview />} />
 
                         <Route path="salesOverview" element={<SalesOverview />} />
 

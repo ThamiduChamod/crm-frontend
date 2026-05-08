@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom';
-import { User, Mail, Phone, Building2, Tag, Trash2, Save, MessageSquare, Clock, IdCardIcon } from 'lucide-react';
+import { User, Trash2, Save, MessageSquare, Clock } from 'lucide-react';
 import { getDetails, getNotes, saveNote, deleteLead, updateLead } from '../service/leader';
 
 interface Lead {
@@ -26,7 +26,6 @@ export default function LeadDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [lead, setLead] = useState<Lead >();
-  const [notes, setNotes] = useState<Note>();
 
   useEffect(() => {
     // Fetch lead details based on ID
@@ -82,6 +81,7 @@ export default function LeadDetails() {
         return;
       }
       const res = await deleteLead(Number(id));
+      console.log("Delete response:", res);
       alert("Lead Deleted!");
       navigate('/dashboard/leads'); 
     }

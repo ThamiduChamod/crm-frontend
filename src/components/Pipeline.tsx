@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { MoreVertical, Plus, DollarSign, Calendar } from 'lucide-react';
 import {getAllLeaders} from '../service/leader';
 interface Lead {

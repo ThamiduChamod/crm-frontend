@@ -18,21 +18,23 @@ import { useAuth } from '../context/AuthContext';
 export default function Dashboard() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { logout, user } = useAuth();
+  const {user } = useAuth();
   const [isOpen, setIsOpen] = React.useState(false);
 
   const menuItems = [
     // { name: 'Dashboard', icon: LayoutDashboard, path: '/dashboard' },
     { name: 'Sales Overview', icon: LayoutDashboard, path: '/dashboard/salesOverview' },
     { name: 'Add Leader', icon: Users, path: '/dashboard/addLeader' },
-    { name: 'Sales Pipeline', icon: GitBranch, path: '/dashboard/pipeline' }, // Bonus: කන්බන් බෝඩ් එක සඳහා
-    { name: 'Activities', icon: ClipboardList, path: '/dashboard/activities' }, // Notes සහ updates බැලීමට
+    { name: 'Sales Pipeline', icon: GitBranch, path: '/dashboard/pipeline' }, 
+    { name: 'Activities', icon: ClipboardList, path: '/dashboard/activities' }, 
     { name: 'Leads', icon: Users, path: '/dashboard/leads' },
     { name: 'Settings', icon: Settings, path: '/dashboard/settings' },
   ];
 
   const handleLogout = () => {
-    logout();
+    console.log('Logging out user:', user);
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
     navigate('/');
   };
 
@@ -90,11 +92,11 @@ export default function Dashboard() {
           <div className="border-t border-neutral-100 pt-6">
             <div className="flex items-center space-x-3 px-2 mb-6">
               <div className="w-10 h-10 rounded-full bg-neutral-900 flex items-center justify-center text-white font-bold text-xs">
-                {user?.name?.charAt(0) || 'A'}
+                {user?.data.name?.charAt(0) || 'A'}
               </div>
               <div className="flex-1 overflow-hidden">
-                <p className="text-sm font-bold truncate">{user?.name || 'Admin User'}</p>
-                <p className="text-[10px] text-neutral-400 truncate">{user?.email}</p>
+                <p className="text-sm font-bold truncate">{user?.data.name || 'Admin User'}</p>
+                <p className="text-[10px] text-neutral-400 truncate">{user?.data.email}</p>
               </div>
               <button className="text-neutral-400 hover:text-black">
                 <Bell size={16} />

@@ -43,20 +43,9 @@ export default function Leads() {
     };
 
     fetchLeads();
-    // console.log(lead)
+    
   }, []);
   console.log(leads);
-
-  // Demo Data - පසුව මෙය Backend එකෙන් ලබාගන්න
-  // const [leads] = useState([
-  //   { id: 1, name: 'Siri Perera', company: 'Siri Constr.', email: 'siri@cons.lk', status: 'Won', value: '$150,000', source: 'LinkedIn' },
-  //   { id: 2, name: 'John Doe', company: 'Global Tech', email: 'john@tech.com', status: 'New', value: '$45,000', source: 'Website' },
-  //   { id: 3, name: 'Amara Silva', company: 'Fashion Hub', email: 'amara@style.lk', status: 'Contacted', value: '$20,000', source: 'Referral' },
-  //   { id: 4, name: 'Kamal Gun', company: 'Auto Mart', email: 'kamal@auto.lk', status: 'Lost', value: '$85,000', source: 'Cold Email' },
-  //   { id: 5, name: 'Nimali Ratnayake', company: 'Green Garden', email: 'nimali@gg.lk', status: 'Qualified', value: '$12,000', source: 'Website' },
-  // ]);
-
-  // Search සහ Filter Logic
   const filteredLeads = leads.filter(lead => {
     const matchesSearch = lead.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
                           lead.company.toLowerCase().includes(searchQuery.toLowerCase());
@@ -99,7 +88,7 @@ export default function Leads() {
           <p className="text-gray-500 text-sm mt-1">Total {filteredLeads.length} leads found in the system.</p>
         </div>
         <button 
-          onClick={() => setIsModalOpen(true)}
+          onClick={() => navigate("/dashboard/addLeader")}
           className="bg-black text-white px-6 py-3 rounded-xl flex items-center font-bold hover:bg-neutral-800 transition-all shadow-lg active:scale-95"
         >
           <Plus size={18} className="mr-2" /> Add New Lead

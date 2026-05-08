@@ -28,7 +28,6 @@ export default function SalesOverview() {
   const [leads, setLeads] = useState<Lead[]>([]);
   const [totalValue, setTotalValue] = useState(0);
   const [totalWonValue, setTotalWonValue] = useState(0);
-  const [totalLeadsValue, setTotalLeadsValue] = useState(0);
   useEffect(() => {
       fetchLeads();
     }, []);

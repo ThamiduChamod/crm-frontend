@@ -43,19 +43,6 @@ export default function LeadDetails() {
       
     }
   }
-  // මෙතනදී Backend එකෙන් ID එකට අදාළ දත්ත ගේන්න ඕනේ. දැනට Demo data:
-  // const [lead, setLead] = useState({
-  //   name: 'Siri Perera',
-  //   email: 'siri@construction.lk',
-  //   phone: '0712345678',
-  //   company: 'Siri Construction',
-  //   status: 'Contacted',
-  //   deal_value: '150000',
-  //   notes: [
-  //     { id: 1, text: 'Interested in bulk orders.', date: '2024-05-20' },
-  //     { id: 2, text: 'Follow up next Tuesday.', date: '2024-05-21' }
-  //   ]
-  // });
 
   const [newNote, setNewNote] = useState('');
 
@@ -96,7 +83,7 @@ export default function LeadDetails() {
       }
       const res = await deleteLead(Number(id));
       alert("Lead Deleted!");
-      navigate('/dashboard/leads'); // Delete කළාට පස්සේ ආපහු list එකට යනවා
+      navigate('/dashboard/leads'); 
     }
   };
 
@@ -119,7 +106,7 @@ export default function LeadDetails() {
     } catch (error) {
       alert("Failed to add note. Please try again.");
     }
-    const noteObj = { id: Date.now(), content: newNote, date: new Date().toLocaleDateString() };
+    
 
     setNewNote('');
   };
@@ -137,9 +124,6 @@ export default function LeadDetails() {
         )
       )
     ]
-
-
-    // return lead.notes.map(note => ({  id: note.id, text: note.content, date: new Date(note.createdAt).toLocaleDateString() }));
   }
 
   return (

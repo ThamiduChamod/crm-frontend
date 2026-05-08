@@ -117,7 +117,7 @@ export default function AddLeader() {
             </div>
           </div>
 
-          {/* Phone Number - අලුතින් එකතු කළ කොටස */}
+          {/* Phone Number */}
           <div className="space-y-1">
             <label className="text-xs font-bold text-neutral-500 uppercase">Phone Number</label>
             <div className="relative">

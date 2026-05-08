@@ -47,57 +47,7 @@ export default function Activities() {
     status: RefreshCw,
     won: CheckCircle2
   };
-  // Demo Activity Data
-  // const activities = [
-  //   {
-  //     id: 1,
-  //     type: 'note',
-  //     user: 'Admin User',
-  //     action: 'added a note to',
-  //     target: 'Siri Perera',
-  //     content: 'Customer is interested in the premium plan, follow up on Monday.',
-  //     time: '2 hours ago',
-  //     icon: MessageSquare,
-  //     color: 'text-blue-600',
-  //     bg: 'bg-blue-50'
-  //   },
-  //   {
-  //     id: 2,
-  //     type: 'status',
-  //     user: 'Admin User',
-  //     action: 'changed status of',
-  //     target: 'John Doe',
-  //     content: 'New → Contacted',
-  //     time: '4 hours ago',
-  //     icon: RefreshCw,
-  //     color: 'text-purple-600',
-  //     bg: 'bg-purple-50'
-  //   },
-  //   {
-  //     id: 3,
-  //     type: 'lead',
-  //     user: 'Admin User',
-  //     action: 'created a new lead',
-  //     target: 'Amara Silva',
-  //     content: 'Source: LinkedIn | Value: $20,000',
-  //     time: 'Yesterday',
-  //     icon: UserPlus,
-  //     color: 'text-emerald-600',
-  //     bg: 'bg-emerald-50'
-  //   },
-  //   {
-  //     id: 4,
-  //     type: 'won',
-  //     user: 'Admin User',
-  //     action: 'marked as won',
-  //     target: 'Kamal Gun',
-  //     content: 'Deal closed for $85,000',
-  //     time: '2 days ago',
-  //     icon: CheckCircle2,
-  //     color: 'text-amber-600',
-  //     bg: 'bg-amber-50'
-  //   }
-  // ];
+  
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
